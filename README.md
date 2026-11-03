@@ -39,7 +39,7 @@ npm ci
 npm run dev
 ```
 
-Откройте **http://127.0.0.1:5173/dates**. Сервер приложения, Docker, PostgreSQL, Redis и MinIO не требуются.
+Откройте **http://127.0.0.1:5173/dates**. Для демонстрации достаточно Vite: данные карточек предоставляет MSW из mock-коллекции проекта.
 
 ```bash
 npm run build
