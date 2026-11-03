@@ -13,11 +13,9 @@ export interface AsteroidDate {
   creatorId: number;
   createdAt: string;
   formedAt: string;
-  isCreator: 0 | 1;
-  isLiked: 0 | 1;
+  isCreator: 0;
+  isLiked: 0;
 }
-
-export interface DraftDate extends Omit<AsteroidDate, 'status'> { status: 'draft' }
 
 export interface ApiResponse<T> { data: T }
 export interface DatesFilters { maxMonth: number }

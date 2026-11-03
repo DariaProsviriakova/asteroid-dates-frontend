@@ -4,14 +4,7 @@ import type { AsteroidDate } from '../types/date';
 import { formatApproach, formatDistance } from '../lib/format';
 import { DateImage } from './DateMedia';
 
-interface DateCardProps {
-  date: AsteroidDate;
-  pending: boolean;
-  onDelete: (date: AsteroidDate) => void;
-  onLike: (date: AsteroidDate) => void;
-}
-
-export function DateCard({ date, pending, onDelete, onLike }: DateCardProps) {
+export function DateCard({ date }: { date: AsteroidDate }) {
   const href = '/dates/feed/' + date.id;
   return <Card as="article" className="asteroid-card" data-date-id={date.id}>
     <Link className="card-main" to={href} aria-label={'Открыть ленту для ' + date.designation}>
@@ -22,8 +15,8 @@ export function DateCard({ date, pending, onDelete, onLike }: DateCardProps) {
       <span className="card-date">{formatApproach(date.approachDay, date.approachMonth)}</span>
       <strong>{formatDistance(date.minimumDistanceAu)}</strong>
       <div className="card-row">
-        <button className="card-like" type="button" aria-label={'Нравится ' + date.designation} aria-pressed={Boolean(date.isLiked)} disabled={pending} onClick={() => onLike(date)}><span className="card-heart">{date.isLiked ? '♥' : '♡'}</span><span>{date.likesCount}</span></button>
-        <form onSubmit={event => { event.preventDefault(); onDelete(date); }}><button type="submit" className="card-delete" disabled={pending} aria-label={'Удалить ' + date.designation}>×</button></form>
+        <span className="card-like" aria-label={'Лайков: ' + date.likesCount}><span className="card-heart">♡</span><span>{date.likesCount}</span></span>
+        <button type="button" className="card-delete" disabled aria-label={'Удалить ' + date.designation} title="Удаление недоступно гостю">×</button>
       </div>
     </Card.Body>
   </Card>;

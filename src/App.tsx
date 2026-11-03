@@ -4,8 +4,6 @@ import { BottomNavbar } from './components/BottomNavbar';
 import { DatesPage } from './pages/DatesPage';
 import { FeedPage } from './pages/FeedPage';
 import { RegistrationPage } from './pages/RegistrationPage';
-import { LoginPage } from './pages/LoginPage';
-import { AddDatePage } from './pages/AddDatePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 function FeedAlias() {
@@ -27,13 +25,13 @@ export function App() {
     <Routes>
       <Route path="/" element={<Navigate to="/dates" replace />} />
       <Route path="/dates" element={<DatesPage />} />
-      <Route path="/dates/add" element={<AddDatePage />} />
+      <Route path="/dates/add" element={<Navigate to="/dates" replace />} />
       <Route path="/dates/feed" element={<FeedPage />} />
       <Route path="/dates/feed/:id" element={<FeedPage />} />
       <Route path="/feed" element={<FeedAlias />} />
       <Route path="/dates/:id" element={<DateAlias />} />
       <Route path="/register" element={<RegistrationPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<Navigate to="/dates" replace />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
     <BottomNavbar />
