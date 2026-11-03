@@ -3,31 +3,23 @@ import { DEFAULT_FILTERS, filterDates, parseFilters, serializeFilters } from './
 import { DEFAULT_IMAGE, DEFAULT_VIDEO, resolveMedia } from './media';
 import { mockDates } from '../mocks/dates';
 
-describe('Фильтры каталога', () => {
+describe('Фильтр месяца из бэкенда', () => {
   it('включает граничный месяц и исключает более поздние даты', () => {
-    expect(filterDates(mockDates, { ...DEFAULT_FILTERS, maxMonth: 5 }).map(date => date.designation))
-      .toEqual(['2026 KJ', '2026 KK3']);
-  });
-  it('совмещает поиск без учёта регистра с фильтром месяца', () => {
-    expect(filterDates(mockDates, { ...DEFAULT_FILTERS, maxMonth: 6, query: '  kr ' }).map(date => date.id))
-      .toEqual([4]);
+    expect(filterDates(mockDates, { maxMonth: 5 }).map(date => date.designation)).toEqual(['2026 KJ', '2026 KK3']);
   });
   it('возвращает пустой список для января', () => {
-    expect(filterDates(mockDates, { ...DEFAULT_FILTERS, maxMonth: 1 })).toEqual([]);
+    expect(filterDates(mockDates, { maxMonth: 1 })).toEqual([]);
   });
-  it('сортирует по расстоянию, не меняя исходную коллекцию', () => {
-    const before = mockDates.map(date => date.id);
-    const result = filterDates(mockDates, { ...DEFAULT_FILTERS, sort: 'distance' });
-    expect(result[0].designation).toBe('2026 KL2');
-    expect(mockDates.map(date => date.id)).toEqual(before);
+  it('сохраняет порядок исходной коллекции', () => {
+    const ids = mockDates.map(date => date.id);
+    expect(filterDates(mockDates, DEFAULT_FILTERS).map(date => date.id)).toEqual(ids);
+    expect(mockDates.map(date => date.id)).toEqual(ids);
   });
-  it('сохраняет фильтры в URL и читает их обратно', () => {
-    const filters = { query: '2026 KJ', maxMonth: 5, sort: 'name' as const };
-    expect(parseFilters(serializeFilters(filters))).toEqual(filters);
+  it('сохраняет фильтр в URL и читает его обратно', () => {
+    expect(parseFilters(serializeFilters({ maxMonth: 5 }))).toEqual({ maxMonth: 5 });
   });
   it.each(['-1', '13', 'abc', '5.5'])('заменяет неверный месяц %s значением 12', value => {
-    expect(parseFilters(new URLSearchParams({ maxMonth: value, sort: 'invalid' })))
-      .toEqual(DEFAULT_FILTERS);
+    expect(parseFilters(new URLSearchParams({ maxMonth: value }))).toEqual(DEFAULT_FILTERS);
   });
 });
 

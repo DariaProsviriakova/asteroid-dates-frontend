@@ -4,37 +4,37 @@ import type { AsteroidDate } from '../types/date';
 export const mockDates: readonly AsteroidDate[] = [
   {
     id: 2, designation: '2026 KJ',
-    shortDescription: 'Майское сближение с Землёй. Астероид пройдёт на расстоянии около 3,3 миллиона километров. Откройте визуализацию, чтобы рассмотреть небесное тело и его траекторию.',
+    shortDescription: '2026 KJ пройдет 12 мая 2026. Расчетное минимальное расстояние до Земли — 0,022 а.е.',
     approachMonth: 5, approachDay: 12, minimumDistanceAu: 0.02231,
     imageUrl: '/media/asteroid-hero.png', videoUrl: '/media/asteroid-day-12.mp4', likesCount: 5,
   },
   {
     id: 3, designation: '2026 KK3',
-    shortDescription: 'Вторая дата майской серии наблюдений. Расчётное расстояние сближения — около 6,4 миллиона километров. Изображение и видео иллюстрируют карточку наблюдения.',
+    shortDescription: '2026 KK3 пройдет 15 мая 2026. Расчетное минимальное расстояние до Земли — 0,043 а.е.',
     approachMonth: 5, approachDay: 15, minimumDistanceAu: 0.04297,
     imageUrl: '/media/asteroid-day-15.png', videoUrl: '/media/asteroid-day-15.mp4', likesCount: 4,
   },
   {
     id: 4, designation: '2026 KR',
-    shortDescription: 'Июньское наблюдение астероида 2026 KR. Минимальное расстояние до Земли — примерно 2,1 миллиона километров. Дата включена в летнюю подборку сближений.',
+    shortDescription: '2026 KR пройдет 18 июня 2026. Расчетное минимальное расстояние до Земли — 0,014 а.е.',
     approachMonth: 6, approachDay: 18, minimumDistanceAu: 0.01385,
     imageUrl: '/media/asteroid-day-18.png', videoUrl: '/media/asteroid-day-18.mp4', likesCount: 3,
   },
   {
     id: 5, designation: '2026 JD4',
-    shortDescription: 'Сближение 21 июня на расстоянии около 1,6 миллиона километров. Автор пока не добавил изображение и видео: приложение показывает локальные медиа по умолчанию.',
+    shortDescription: '2026 JD4 пройдет 21 июня 2026. Расчетное минимальное расстояние до Земли — 0,011 а.е.',
     approachMonth: 6, approachDay: 21, minimumDistanceAu: 0.01088,
     imageUrl: null, videoUrl: null, likesCount: 2,
   },
   {
     id: 6, designation: '2026 HF4',
-    shortDescription: 'Июльская дата с самым большим расстоянием в подборке — около 10,2 миллиона километров. Видео не приложено, поэтому доступна визуализация по умолчанию.',
+    shortDescription: '2026 HF4 пройдет 24 июля 2026. Расчетное минимальное расстояние до Земли — 0,068 а.е.',
     approachMonth: 7, approachDay: 24, minimumDistanceAu: 0.06819,
     imageUrl: '/media/asteroid-day-24.png', videoUrl: '', likesCount: 1,
   },
   {
     id: 7, designation: '2026 KL2',
-    shortDescription: 'Самое близкое сближение в учебной подборке. Астероид пройдёт примерно в 1 миллионе километров от Земли. Завершающая дата июльской серии.',
+    shortDescription: '2026 KL2 пройдет 27 июля 2026. Расчетное минимальное расстояние до Земли — 0,007 а.е.',
     approachMonth: 7, approachDay: 27, minimumDistanceAu: 0.00693,
     imageUrl: '/media/asteroid-day-27.png', videoUrl: '/media/asteroid-day-27.mp4', likesCount: 1,
   },

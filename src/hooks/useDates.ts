@@ -30,5 +30,5 @@ export function useDates<T>(path: string) {
     return () => controller.abort();
   }, [path, revision]);
 
-  return { data, loading, error, reload: () => setRevision(value => value + 1) };
+  return { data, setData, loading, error, reload: () => setRevision(value => value + 1) };
 }

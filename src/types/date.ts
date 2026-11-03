@@ -13,10 +13,11 @@ export interface AsteroidDate {
   creatorId: number;
   createdAt: string;
   formedAt: string;
-  isCreator: 0;
-  isLiked: 0;
+  isCreator: 0 | 1;
+  isLiked: 0 | 1;
 }
 
+export interface DraftDate extends Omit<AsteroidDate, 'status'> { status: 'draft' }
+
 export interface ApiResponse<T> { data: T }
-export type DatesSort = 'date' | 'distance' | 'name';
-export interface DatesFilters { query: string; maxMonth: number; sort: DatesSort }
+export interface DatesFilters { maxMonth: number }
