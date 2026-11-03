@@ -2,7 +2,7 @@
 
 React + TypeScript + Vite + React-Bootstrap. Отдельный фронтенд проекта дат сближения астероидов с Землёй.
 
-**Ветка:** `codex/lab5-dates-react-spa`.
+**Ветка:** `lab5-dates-react-spa`.
 
 ## Визуал ЛР2
 
@@ -19,7 +19,7 @@ React + TypeScript + Vite + React-Bootstrap. Отдельный фронтенд
 ```bash
 git clone https://github.com/DariaProsviriakova/asteroid-dates-frontend.git
 cd asteroid-dates-frontend
-git switch codex/lab5-dates-react-spa
+git switch lab5-dates-react-spa
 npm ci
 npm run dev
 ```
