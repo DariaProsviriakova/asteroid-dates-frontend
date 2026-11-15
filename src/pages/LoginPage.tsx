@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../store/store';
 
 export function LoginPage() {
   useDocumentTitle('Вход');
-  const [email, setEmail] = useState('');
+  const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const { error, status } = useAppSelector(state => state.auth);
   const dispatch = useAppDispatch();
@@ -20,26 +20,25 @@ export function LoginPage() {
 
   return <main className="form-page" id="main-content">
     <header className="page-header"><h1>ВХОД</h1></header>
-    <p className="form-intro">Войдите, чтобы добавлять даты сближений и отмечать их лайком.</p>
     <Form className="observer-form" onSubmit={async event => {
       event.preventDefault();
       dispatch(requestStarted('login'));
       try {
-        dispatch(signedIn(await loginObserver(email, password)));
+        dispatch(signedIn(await loginObserver(login, password)));
       } catch (cause) {
-        dispatch(requestFailed(apiStatus(cause) === 401 ? 'Неверный email или пароль.' : apiErrorMessage(cause, 'Не удалось войти.')));
+        dispatch(requestFailed(apiStatus(cause) === 401 ? 'Неверный логин или пароль.' : apiErrorMessage(cause, 'Не удалось войти.')));
       }
     }}>
-      <Form.Group controlId="login-email" className="field-block">
-        <Form.Label>Email</Form.Label>
-        <Form.Control type="email" value={email} autoComplete="username" maxLength={120} required onChange={event => {
-          setEmail(event.target.value);
+      <Form.Group controlId="login-name" className="field-block">
+        <Form.Label>Логин</Form.Label>
+        <Form.Control type="text" value={login} autoComplete="username" autoCapitalize="none" spellCheck={false} maxLength={120} required onChange={event => {
+          setLogin(event.target.value);
           if (error) dispatch(clearAuthError());
         }} />
       </Form.Group>
       <Form.Group controlId="login-password" className="field-block">
         <Form.Label>Пароль</Form.Label>
-        <Form.Control type="password" value={password} autoComplete="current-password" minLength={8} maxLength={128} required onChange={event => {
+        <Form.Control type="password" value={password} autoComplete="current-password" maxLength={128} required onChange={event => {
           setPassword(event.target.value);
           if (error) dispatch(clearAuthError());
         }} />

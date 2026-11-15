@@ -23,9 +23,10 @@ interface DateVideoProps {
   poster: string | null;
   designation: string;
   ambient?: boolean;
+  className?: string;
 }
 
-export function DateVideo({ src, poster, designation, ambient = false }: DateVideoProps) {
+export function DateVideo({ src, poster, designation, ambient = false, className = '' }: DateVideoProps) {
   const original = resolveMedia(src, DEFAULT_VIDEO);
   const [failed, setFailed] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
@@ -35,7 +36,7 @@ export function DateVideo({ src, poster, designation, ambient = false }: DateVid
   if (unavailable) return <div className="media-unavailable"><DateImage src={poster} alt={`Астероид ${designation}`} /><span>Видео недоступно. Показано изображение.</span></div>;
 
   return <video
-    key={selected} className="date-video"
+    key={selected} className={`date-video ${className}`}
     src={selected} poster={resolveMedia(poster, DEFAULT_IMAGE)}
     autoPlay={ambient} muted={ambient} loop={ambient} playsInline
     controls={!ambient} preload={ambient ? 'auto' : 'metadata'}
