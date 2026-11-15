@@ -1,0 +1,598 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/dates": {
+      "get": {
+        "description": "Доступен гостю и пользователю, в том числе с неверной cookie. Черновики и удалённые записи не включаются.",
+        "operationId": "listPublishedDates",
+        "parameters": [
+          {
+            "name": "maxMonth",
+            "required": false,
+            "in": "query",
+            "description": "Месяц сближения не позднее указанного",
+            "schema": {
+              "minimum": 1,
+              "maximum": 12,
+              "example": 7,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DateListEnvelopeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры запроса"
+          }
+        },
+        "summary": "Список опубликованных дат",
+        "tags": [
+          "Даты сближения астероидов"
+        ]
+      },
+      "post": {
+        "description": "Не более одного черновика на пользователя. Автор автоматически берётся из Redis-сессии. Картинка и видео необязательны, до 50 МБ каждый.",
+        "operationId": "createDraft",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "designation"
+                ],
+                "properties": {
+                  "designation": {
+                    "type": "string",
+                    "maxLength": 120,
+                    "example": "2026 LAB4"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "PNG, JPEG, GIF или WebP"
+                  },
+                  "video": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "MP4, WebM или QuickTime"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DateEnvelopeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры запроса"
+          },
+          "401": {
+            "description": "Требуется вход"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Создать или обновить собственный черновик",
+        "tags": [
+          "Даты сближения астероидов"
+        ]
+      }
+    },
+    "/api/dates/feed": {
+      "get": {
+        "description": "Без id — первая запись; с id — выбранная запись; с id и next=true — следующая по id с переходом к началу. Только опубликованные даты.",
+        "operationId": "getFeedDate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "next",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DateListEnvelopeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры запроса"
+          },
+          "404": {
+            "description": "Опубликованная дата не найдена"
+          }
+        },
+        "summary": "Лента астероидов",
+        "tags": [
+          "Даты сближения астероидов"
+        ]
+      }
+    },
+    "/api/dates/draft": {
+      "get": {
+        "description": "Чужие черновики недоступны. При отсутствии собственного черновика data=null.",
+        "operationId": "getCurrentDraft",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftEnvelopeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры запроса"
+          },
+          "401": {
+            "description": "Требуется вход"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Черновик текущего наблюдателя",
+        "tags": [
+          "Даты сближения астероидов"
+        ]
+      }
+    },
+    "/api/dates/publish": {
+      "put": {
+        "description": "Обновляет описание, дату и расстояние, устанавливает status=published и formedAt. Гость получает 401.",
+        "operationId": "publishDraft",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishDateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DateEnvelopeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры запроса"
+          },
+          "401": {
+            "description": "Требуется вход"
+          },
+          "404": {
+            "description": "Собственный черновик не найден"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Опубликовать собственный черновик",
+        "tags": [
+          "Даты сближения астероидов"
+        ]
+      }
+    },
+    "/api/dates/{id}": {
+      "delete": {
+        "description": "Логическое удаление: status=deleted. Чужие записи изменять нельзя.",
+        "operationId": "deleteDate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "data": {
+                      "id": 8,
+                      "isDeleted": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры запроса"
+          },
+          "401": {
+            "description": "Требуется вход"
+          },
+          "404": {
+            "description": "Собственная неудалённая дата не найдена"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Удалить собственную дату",
+        "tags": [
+          "Даты сближения астероидов"
+        ]
+      }
+    },
+    "/api/dates/{id}/like": {
+      "post": {
+        "description": "Повторная установка лайка не создаёт дубликатов.",
+        "operationId": "setLike",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LikeDateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LikeEnvelopeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректные параметры запроса"
+          },
+          "401": {
+            "description": "Требуется вход"
+          },
+          "404": {
+            "description": "Опубликованная дата не найдена"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Поставить или снять свой лайк",
+        "tags": [
+          "Даты сближения астероидов"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Asteroid Dates API — ЛР4",
+    "description": "Даты сближения астероидов с Землёй. Список и лента доступны гостю. Зарегистрируйтесь и выполните POST /api/users/auth в Swagger: браузер сохранит cookie, после чего доступны собственный черновик, публикация, удаление и лайки.",
+    "version": "2.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "session": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "asteroids.sid"
+      }
+    },
+    "schemas": {
+      "AsteroidDateDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 2
+          },
+          "designation": {
+            "type": "string",
+            "example": "2026 KJ"
+          },
+          "shortDescription": {
+            "type": "string",
+            "example": "Сближение астероида с Землёй",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published",
+              "deleted"
+            ]
+          },
+          "creatorId": {
+            "type": "number",
+            "example": 1,
+            "description": "Автор из сессии, не задаётся клиентом"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "formedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "/uploads/dates/date-image.png"
+          },
+          "videoUrl": {
+            "type": "string",
+            "example": "/uploads/dates/date-video.mp4"
+          },
+          "approachMonth": {
+            "type": "number",
+            "example": 5,
+            "nullable": true
+          },
+          "approachDay": {
+            "type": "number",
+            "example": 12,
+            "nullable": true
+          },
+          "minimumDistanceAu": {
+            "type": "number",
+            "example": 0.023,
+            "nullable": true
+          },
+          "likesCount": {
+            "type": "number",
+            "example": 3
+          },
+          "isCreator": {
+            "type": "number",
+            "enum": [
+              0,
+              1
+            ],
+            "description": "1, если текущий пользователь — автор; для гостя 0"
+          },
+          "isLiked": {
+            "type": "number",
+            "enum": [
+              0,
+              1
+            ],
+            "description": "Лайк текущего пользователя; для гостя 0"
+          }
+        },
+        "required": [
+          "id",
+          "designation",
+          "shortDescription",
+          "status",
+          "creatorId",
+          "createdAt",
+          "formedAt",
+          "imageUrl",
+          "videoUrl",
+          "approachMonth",
+          "approachDay",
+          "minimumDistanceAu",
+          "likesCount",
+          "isCreator",
+          "isLiked"
+        ]
+      },
+      "DateListEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AsteroidDateDto"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "DraftEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AsteroidDateDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "DateEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AsteroidDateDto"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "PublishDateDto": {
+        "type": "object",
+        "properties": {
+          "shortDescription": {
+            "type": "string",
+            "example": "Астероид пройдёт рядом с Землёй 18 октября.",
+            "maxLength": 700
+          },
+          "approachMonth": {
+            "type": "number",
+            "example": 10,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "approachDay": {
+            "type": "number",
+            "example": 18,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "minimumDistanceAu": {
+            "type": "number",
+            "example": 0.023,
+            "minimum": 0.00001,
+            "maximum": 999.99999
+          }
+        },
+        "required": [
+          "shortDescription",
+          "approachMonth",
+          "approachDay"
+        ]
+      },
+      "LikeDateDto": {
+        "type": "object",
+        "properties": {
+          "like": {
+            "type": "number",
+            "enum": [
+              0,
+              1
+            ],
+            "example": 1,
+            "description": "1 — поставить, 0 — снять; требуется like, liked или value"
+          },
+          "liked": {
+            "type": "number",
+            "enum": [
+              0,
+              1
+            ],
+            "description": "Альтернативное имя поля like"
+          },
+          "value": {
+            "type": "number",
+            "enum": [
+              0,
+              1
+            ],
+            "description": "Альтернативное имя поля like"
+          }
+        }
+      },
+      "LikeDataDto": {
+        "type": "object",
+        "properties": {
+          "like": {
+            "type": "number",
+            "enum": [
+              0,
+              1
+            ]
+          },
+          "date": {
+            "$ref": "#/components/schemas/AsteroidDateDto"
+          }
+        },
+        "required": [
+          "like",
+          "date"
+        ]
+      },
+      "LikeEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LikeDataDto"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
   "name": "asteroid-dates-frontend",
   "private": true,
   "version": "1.0.0",
-  "description": "ЛР5 — SPA каталога дат сближения астероидов",
+  "description": "ЛР6 — пользовательский интерфейс каталога дат сближения астероидов",
   "type": "module",
   "engines": {
     "node": ">=22.12.0"
@@ -14,14 +14,16 @@
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
-    "mocks:init": "msw init public --save"
+    "generate:api": "node scripts/generate-api.mjs"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.14.0",
+    "axios": "^1.21.1",
     "bootstrap": "^5.3.8",
-    "msw": "^2.12.2",
     "react": "^19.2.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.0",
+    "react-redux": "^9.3.1",
     "react-router-dom": "^7.9.5"
   },
   "devDependencies": {
@@ -29,13 +31,9 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.1.0",
+    "swagger-typescript-api": "^13.14.0",
     "typescript": "~5.9.3",
     "vite": "^7.2.2",
-    "vitest": "^3.2.4"
-  },
-  "msw": {
-    "workerDirectory": [
-      "public"
-    ]
+    "vitest": "^4.1.12"
   }
 }

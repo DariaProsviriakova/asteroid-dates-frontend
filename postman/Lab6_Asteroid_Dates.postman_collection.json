@@ -1,0 +1,33 @@
+{
+  "info": {
+    "name": "ЛР6 · Астероиды: плитка пользователя",
+    "description": "После входа в React и F5 скопируйте cookie asteroids.sid из Application → Cookies. Укажите в sessionCookie всю пару asteroids.sid=<Value>. Используйте отдельного учебного пользователя с опубликованной датой и нужный maxMonth.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:5173" },
+    { "key": "maxMonth", "value": "12" },
+    { "key": "sessionCookie", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Плитка пользователя: флаг isCreator",
+      "event": [{
+        "listen": "test",
+        "script": { "type": "text/javascript", "exec": [
+          "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+          "pm.test('Есть опубликованная карточка пользователя с isCreator: 1', () => {",
+          "  const { data } = pm.response.json();",
+          "  pm.expect(data.some(date => date.isCreator === 1 && date.status === 'published')).to.be.true;",
+          "});"
+        ] }
+      }],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Cookie", "value": "{{sessionCookie}}", "type": "text" }],
+        "url": "{{baseUrl}}/api/dates?maxMonth={{maxMonth}}",
+        "description": "В ответе isCreator: 1 означает, что React разрешит удаление этой карточки при выполненном входе. Чужие карточки имеют isCreator: 0."
+      }
+    }
+  ]
+}

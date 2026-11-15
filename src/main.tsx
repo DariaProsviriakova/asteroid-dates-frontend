@@ -1,26 +1,33 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './backend.css';
 import './styles.css';
 import { App } from './App';
+import { store } from './store/store';
+
+// ЛР5 регистрировала MSW на том же адресе. Старый worker иначе перехватит реальные GET.
+async function retireMockWorker(): Promise<boolean> {
+  if (!('serviceWorker' in navigator)) return false;
+  const workers = navigator.serviceWorker;
+  const isMockWorker = (worker: ServiceWorker | null) => worker !== null &&
+    new URL(worker.scriptURL).pathname === '/mockServiceWorker.js';
+  const registration = await workers.getRegistration();
+  if (!registration || ![registration.active, registration.waiting, registration.installing].some(isMockWorker)) return false;
+  const needsReload = isMockWorker(workers.controller);
+  return (await registration.unregister()) && needsReload;
+}
 
 async function start() {
-  // Mock включён и при dev, и при preview production-сборки: бэкенд ЛР5 не нужен.
-  const { worker } = await import('./mocks/browser');
-  await worker.start({
-    onUnhandledRequest(request, print) {
-      if (new URL(request.url).pathname.startsWith('/api/')) print.error();
-    },
-    quiet: true,
-  });
+  if (await retireMockWorker().catch(() => false)) {
+    window.location.reload();
+    return;
+  }
   createRoot(document.getElementById('root')!).render(
-    <StrictMode><BrowserRouter><App /></BrowserRouter></StrictMode>,
+    <StrictMode><Provider store={store}><BrowserRouter><App /></BrowserRouter></Provider></StrictMode>,
   );
 }
 
-start().catch(() => {
-  const root = document.getElementById('root')!;
-  root.innerHTML = '<main class="startup-error"><h1>Не удалось запустить каталог</h1><p>Разрешите Service Worker в браузере и откройте приложение через localhost.</p><button onclick="location.reload()">Повторить</button></main>';
-});
+void start();

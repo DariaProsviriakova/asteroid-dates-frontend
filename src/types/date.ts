@@ -1,21 +1,8 @@
-/** Публичные поля карточки совпадают с сериализатором сервиса ЛР4. */
-export interface AsteroidDate {
-  id: number;
-  designation: string;
-  shortDescription: string | null;
-  status: 'published';
+import type { AsteroidDateDto } from '../api/generated/AsteroidDatesApi';
+
+// В автономной коллекции допустимы отсутствующие медиа, обрабатываемые компонентами.
+export type AsteroidDate = Omit<AsteroidDateDto, 'imageUrl' | 'videoUrl'> & {
   imageUrl: string | null;
   videoUrl: string | null;
-  approachMonth: number;
-  approachDay: number;
-  minimumDistanceAu: number | null;
-  likesCount: number;
-  creatorId: number;
-  createdAt: string;
-  formedAt: string;
-  isCreator: 0;
-  isLiked: 0;
-}
-
-export interface ApiResponse<T> { data: T }
+};
 export interface DatesFilters { maxMonth: number }

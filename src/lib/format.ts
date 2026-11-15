@@ -1,4 +1,5 @@
-export function formatApproach(day: number, month: number): string {
+export function formatApproach(day: number | null, month: number | null): string {
+  if (day === null || month === null) return 'Нет данных';
   return day + ' ' + [
     'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
     'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря',

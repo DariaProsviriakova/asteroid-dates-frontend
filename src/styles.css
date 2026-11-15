@@ -1,5 +1,5 @@
 /* Базовый визуал без изменений перенесён из бэкенда в backend.css.
-   Здесь только совместимость с React-Bootstrap и новые элементы ЛР5. */
+   Здесь только совместимость с React-Bootstrap и элементы React. */
 :root {
   --bs-body-font-family: Inter, Arial, Helvetica, sans-serif;
   --bs-body-line-height: normal;
@@ -49,10 +49,28 @@
 .registration-success { color: var(--ink); line-height: 1.5; }
 .registration-success h2 { font-size: 23px; font-weight: 900; margin-bottom: 18px; }
 .not-found-page h1 { font-size: 25px; font-weight: 900; margin-bottom: 24px; }
-.startup-error { max-width: 498px; margin: 24px auto; padding: 28px; background: white; }
 .skip-link { position: fixed; top: -100px; left: 20px; z-index: 100; padding: 12px; background: white; color: var(--ink); }
 .skip-link:focus { top: 8px; }
 a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .tab-link:focus-visible { outline-color: white; outline-offset: -5px; }
 @media (max-width: 380px) { .tab-link { font-size: 14px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+
+.app-content { height: 100%; }
+.request-overlay { position: absolute; z-index: 20; inset: 0; display: grid; place-items: center; background: #0a17336b; }
+.request-overlay .resource-state { min-height: 0; padding: 16px 22px; border-radius: 12px; background: #fff; color: var(--ink); box-shadow: 0 4px 24px #12234338; }
+.app-request-error { position: absolute; z-index: 12; bottom: 80px; inset-inline: 14px; margin: 0; }
+.like-button { padding: 0; border: 0; background: transparent; }
+.like-button[aria-pressed="true"] > :first-child { color: #e54872; }
+.like-stack.like-button:focus-visible, .next-icon-button:focus-visible { outline-color: #fff; }
+.card-delete:disabled { opacity: .45; }
+.observer-name { margin-left: auto; font-size: 14px; }
+.date-source { width: fit-content; padding: 5px 10px; margin: 0 0 12px; border-radius: 20px; background: #e8eefb; color: var(--ink); font-size: 12px; font-weight: 600; }
+.date-source[data-source="mock"] { background: #fff2cf; color: #6b490c; }
+.date-source-feed { position: absolute; top: 24px; left: 24px; z-index: 3; }
+.form-intro { line-height: 1.45; margin-bottom: 24px; }
+.add-date-page h2 { font-size: 19px; font-weight: 800; margin: 0; }
+.date-form-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.publish-form { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 24px; }
+.draft-thumbnail { width: 100%; max-height: 155px; object-fit: cover; border-radius: 10px; }
+@media (max-width: 380px) { .draft-form .date-form-columns { grid-template-columns: 1fr; } }

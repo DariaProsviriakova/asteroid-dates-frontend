@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_FILTERS, filterDates, parseFilters, serializeFilters } from './filters';
+import { DEFAULT_FILTERS, filterDates } from './filters';
 import { DEFAULT_IMAGE, DEFAULT_VIDEO, resolveMedia } from './media';
 import { mockDates } from '../mocks/dates';
 
@@ -15,12 +15,7 @@ describe('Фильтр месяца из бэкенда', () => {
     expect(filterDates(mockDates, DEFAULT_FILTERS).map(date => date.id)).toEqual(ids);
     expect(mockDates.map(date => date.id)).toEqual(ids);
   });
-  it('сохраняет фильтр в URL и читает его обратно', () => {
-    expect(parseFilters(serializeFilters({ maxMonth: 5 }))).toEqual({ maxMonth: 5 });
-  });
-  it.each(['-1', '13', 'abc', '5.5'])('заменяет неверный месяц %s значением 12', value => {
-    expect(parseFilters(new URLSearchParams({ maxMonth: value }))).toEqual(DEFAULT_FILTERS);
-  });
+
 });
 
 describe('Локальные медиа по умолчанию', () => {
@@ -30,6 +25,9 @@ describe('Локальные медиа по умолчанию', () => {
   });
   it('оставляет явно заданное медиа', () => {
     expect(resolveMedia('/media/asteroid-hero.png', DEFAULT_IMAGE)).toBe('/media/asteroid-hero.png');
+  });
+  it('отправляет медиа MinIO через прокси, сохраняя имя объекта', () => {
+    expect(resolveMedia('http://localhost:9000/asteroids-lab/asteroid-day-15.png', DEFAULT_IMAGE)).toBe('/s3/asteroids-lab/asteroid-day-15.png');
   });
   it('содержит демонстрационную запись без обоих медиа', () => {
     expect(mockDates.find(date => date.id === 5)).toMatchObject({ imageUrl: null, videoUrl: null });

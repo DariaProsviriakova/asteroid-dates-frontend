@@ -1,39 +1,54 @@
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { DateLike } from '../components/DateLike';
 import { DateVideo } from '../components/DateMedia';
-import { ErrorState, LoadingState } from '../components/ResourceState';
-import { useDates } from '../hooks/useDates';
+import { DateSource } from '../components/DateSource';
+import { ErrorState } from '../components/ResourceState';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { formatApproach, formatDistance } from '../lib/format';
-import type { AsteroidDate } from '../types/date';
+import { loadAsteroidFeedDate } from '../store/asteroidDatesThunks';
+import { useAppDispatch, useAppSelector } from '../store/store';
 import { NotFoundPage } from './NotFoundPage';
 
 export function FeedPage() {
   useDocumentTitle('Лента');
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const route = useParams();
-  const [params, setParams] = useSearchParams();
-  const id = params.get('id') ?? route.id;
-  const requestParams = new URLSearchParams();
-  if (id) requestParams.set('id', id);
-  if (params.get('next') === 'true') requestParams.set('next', 'true');
-  const query = requestParams.toString();
-  const { data: date, loading, error, reload } = useDates<AsteroidDate | null>('/api/dates/feed' + (query ? '?' + query : ''));
+  const [params] = useSearchParams();
+  const rawId = params.get('id') ?? route.id;
+  const id = rawId === undefined ? undefined : Number(rawId);
+  const invalidId = id !== undefined && (!Number.isSafeInteger(id) || id < 1 || !/^\d+$/.test(rawId ?? ''));
+  const next = params.get('next') === 'true';
+  const { data: date, status, error, source } = useAppSelector(state => state.dates.feed);
+  const auth = useAppSelector(state => state.auth.status);
+  const [revision, refresh] = useState(0);
 
-  if (!loading && !error && !date) return <NotFoundPage />;
+  useEffect(() => {
+    if (invalidId) return;
+    const request = dispatch(loadAsteroidFeedDate({ id, ...(next ? { next } : {}) }));
+    return () => request.abort();
+  }, [dispatch, id, invalidId, next, auth, revision]);
+
+  if (invalidId || (status === 'succeeded' && !date)) return <NotFoundPage />;
   return <main className="feed-page" id="main-content" data-date-id={date?.id}>
-    {loading && <LoadingState />}
-    {error && <ErrorState message={error} onRetry={reload} />}
-    {!loading && !error && date && <>
+    {status === 'failed' && error && <ErrorState message={error} onRetry={() => refresh(previous => previous + 1)} />}
+    {status === 'succeeded' && date && <>
       <div className="feed-media"><DateVideo src={date.videoUrl} poster={date.imageUrl} designation={date.designation} ambient /></div>
       <div className="feed-shade" />
+      <DateSource source={source} inFeed />
       <section className="feed-content">
         <p className="feed-designation">{date.designation}</p>
         <h1>МИНИМАЛЬНОЕ РАССТОЯНИЕ ДО ЗЕМЛИ</h1>
-        <details className="feed-description" key={date.id}><summary><span>{date.shortDescription}</span></summary></details>
+        {date.shortDescription && <details className="feed-description" key={date.id}><summary><span>{date.shortDescription}</span></summary></details>}
       </section>
       <aside className="feed-side" aria-label="Дата и расстояние сближения">
         <div className="feed-params"><span>Дата</span><strong>{formatApproach(date.approachDay, date.approachMonth)}</strong><span>Расстояние</span><strong>{formatDistance(date.minimumDistanceAu)}</strong></div>
-        <div className="like-stack" aria-label={'Лайков: ' + date.likesCount}><span className="heart-icon">♡</span><span className="like-count">{date.likesCount}</span></div>
-        <button type="button" className="next-icon-button" aria-label="Следующая дата" onClick={() => setParams({ id: String(date.id), next: 'true' })}><span>→</span></button>
+        <DateLike date={date} inFeed />
+        <button type="button" className="next-icon-button" aria-label="Следующая дата" onClick={() => {
+          if (id === date.id && next) refresh(previous => previous + 1);
+          else navigate(`/dates/feed?id=${date.id}&next=true`);
+        }}><span aria-hidden="true">→</span></button>
       </aside>
     </>}
   </main>;
