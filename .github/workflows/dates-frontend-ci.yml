@@ -14,5 +14,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run generate-backend-types
+      - run: git diff --exit-code -- src/api/generated
       - run: npm test
       - run: npm run build

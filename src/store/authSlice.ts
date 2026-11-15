@@ -1,10 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Observer } from '../types/observer';
 
-type AuthOperation = 'login' | 'logout' | 'register';
+type AuthOperation = 'login' | 'logout';
 export interface AuthState {
   observer: Observer | null;
-  status: 'guest' | 'authenticated';
+  status: 'guest' | 'creator';
   pending: AuthOperation | null;
   error: string | null;
 }
@@ -20,13 +20,12 @@ const authSlice = createSlice({
       state.pending = action.payload;
       state.error = null;
     },
-    requestFinished(state) { state.pending = null; },
     requestFailed(state, action: PayloadAction<string>) {
       state.pending = null;
       state.error = action.payload;
     },
     signedIn(_state, action: PayloadAction<Observer>): AuthState {
-      return { ...initialState, observer: action.payload, status: 'authenticated' };
+      return { ...initialState, observer: action.payload, status: 'creator' };
     },
     signedOut: () => initialState,
     sessionExpired: (): AuthState => ({ ...initialState, error: 'Сессия истекла. Войдите снова.' }),
@@ -34,5 +33,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { requestStarted, requestFinished, requestFailed, signedIn, signedOut, sessionExpired, clearAuthError } = authSlice.actions;
+export const { requestStarted, requestFailed, signedIn, signedOut, sessionExpired, clearAuthError } = authSlice.actions;
 export const authReducer = authSlice.reducer;

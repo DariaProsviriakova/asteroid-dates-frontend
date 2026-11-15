@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { asteroidDatesApi, dateReadConfig } from '../api/dates';
+import { asteroidDatesApi, dateReadConfig, requestAsteroidDateDeletion } from '../api/dates';
 import { apiErrorMessage, apiStatus, isServiceUnavailable } from '../api/errors';
 import type { GetFeedDateParams, PublishDateDto } from '../api/generated/AsteroidDatesApi';
 import { filterDates } from '../lib/filters';
@@ -82,10 +82,7 @@ export const publishAsteroidDate = protectedAsteroidRequest<PublishDateDto, Aste
 
 export const deleteAsteroidDate = protectedAsteroidRequest<number, number>(
   'deleteAsteroidDate', 'Не удалось удалить дату.',
-  async (id, signal) => {
-    await asteroidDatesApi.deleteDate({ id }, { signal });
-    return id;
-  },
+  async (id, signal) => (await requestAsteroidDateDeletion(id, signal)).data.data.id,
 );
 
 export const setAsteroidDateLike = protectedAsteroidRequest<{ id: number; like: 0 | 1 }, AsteroidDate>(

@@ -7,7 +7,6 @@ import { AddDatePage } from './pages/AddDatePage';
 import { DatesPage } from './pages/DatesPage';
 import { FeedPage } from './pages/FeedPage';
 import { LoginPage } from './pages/LoginPage';
-import { RegistrationPage } from './pages/RegistrationPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { clearDateActionError } from './store/asteroidDatesSlice';
 import { clearAuthError } from './store/authSlice';
@@ -35,7 +34,7 @@ export function App() {
   const busy = useAppSelector(selectBusy);
   const authError = useAppSelector(state => state.auth.error);
   const mutationError = useAppSelector(state => state.dates.mutation.error);
-  const showAuthError = authError && pathname !== '/login' && pathname !== '/register';
+  const showAuthError = authError && pathname !== '/login';
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,7 +52,6 @@ export function App() {
         <Route path="/dates/feed/:id" element={<FeedPage />} />
         <Route path="/feed" element={<FeedAlias />} />
         <Route path="/dates/:id" element={<DateAlias />} />
-        <Route path="/register" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
-import { Link, Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { apiErrorMessage, apiStatus } from '../api/errors';
 import { loginObserver } from '../api/observers';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
@@ -16,12 +16,12 @@ export function LoginPage() {
   const { state } = useLocation();
   const destination = state?.fromAdd ? '/dates/add' : '/dates';
 
-  if (status === 'authenticated') return <Navigate to={destination} replace />;
+  if (status === 'creator') return <Navigate to={destination} replace />;
 
   return <main className="form-page" id="main-content">
     <header className="page-header"><h1>ВХОД</h1></header>
     <p className="form-intro">Войдите, чтобы добавлять даты сближений и отмечать их лайком.</p>
-    <Form className="registration-form" onSubmit={async event => {
+    <Form className="observer-form" onSubmit={async event => {
       event.preventDefault();
       dispatch(requestStarted('login'));
       try {
@@ -46,7 +46,6 @@ export function LoginPage() {
       </Form.Group>
       {error && <Alert variant="danger">{error}</Alert>}
       <Button type="submit" className="primary-button">Войти</Button>
-      <Link to="/register" onClick={() => dispatch(clearAuthError())}>Зарегистрироваться</Link>
     </Form>
   </main>;
 }

@@ -72,7 +72,7 @@ export function AddDatePage() {
       <p className="form-intro">Сохраните черновик. Карточка появится в плитке и ленте после публикации.</p>
       {formError && <Alert variant="danger">{formError}</Alert>}
       {notice && <Alert variant="success" role="status">{notice}</Alert>}
-      <Form key={`${draft?.id ?? 'new'}:${draft?.designation ?? ''}`} className="registration-form draft-form" onSubmit={save}>
+      <Form key={`${draft?.id ?? 'new'}:${draft?.designation ?? ''}`} className="observer-form draft-form" onSubmit={save}>
         <h2>{draft ? `Черновик: ${draft.designation}` : 'Новый черновик'}</h2>
         {draft && <DateImage src={draft.imageUrl} alt={draft.designation} className="draft-thumbnail" />}
         <Form.Group controlId="date-designation" className="field-block">
@@ -92,7 +92,7 @@ export function AddDatePage() {
         <Form.Text>Файлы необязательны, до 50 МБ каждый.</Form.Text>
         <Button type="submit" className="primary-button">Сохранить черновик</Button>
       </Form>
-      {draft && <Form key={draft.id} className="registration-form publish-form" onSubmit={publish}>
+      {draft && <Form key={draft.id} className="observer-form publish-form" onSubmit={publish}>
         <h2>Публикация</h2>
         <Form.Group controlId="date-description" className="field-block">
           <Form.Label>Краткое описание</Form.Label>

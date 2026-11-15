@@ -8,7 +8,7 @@ import { DateImage } from './DateMedia';
 import { DateLike } from './DateLike';
 
 export function DateCard({ date }: { date: AsteroidDate }) {
-  const isUser = useAppSelector(state => state.auth.status === 'authenticated');
+  const isUser = useAppSelector(state => state.auth.status === 'creator');
   const dispatch = useAppDispatch();
   const canDelete = isUser && date.isCreator === 1;
   const href = '/dates/feed/' + date.id;

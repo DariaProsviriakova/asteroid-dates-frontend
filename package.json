@@ -14,7 +14,7 @@
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
-    "generate:api": "node scripts/generate-api.mjs"
+    "generate-backend-types": "node scripts/generate-api.mjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.14.0",
@@ -35,5 +35,22 @@
     "typescript": "~5.9.3",
     "vite": "^7.2.2",
     "vitest": "^4.1.12"
+  },
+  "swaggerCodegen": {
+    "input": "openapi/asteroid-dates.json",
+    "output": "src/api/generated",
+    "fileName": "AsteroidDatesApi.ts",
+    "httpClientType": "axios",
+    "generateClient": true,
+    "extractRequestParams": true,
+    "unwrapResponseData": false,
+    "operationIds": [
+      "listPublishedDates",
+      "getFeedDate",
+      "getCurrentDraft",
+      "createDraft",
+      "publishDraft",
+      "setLike"
+    ]
   }
 }

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 800" role="img" aria-labelledby="title description">
   <title id="title">Диаграмма прецедентов React: даты сближений астероидов</title>
-  <desc id="description">Гость и наблюдатель просматривают плитку и ленту и фильтруют даты. Гость может зарегистрироваться и войти. Наблюдатель может сохранить черновик, опубликовать дату, изменить лайк, удалить свою дату и выйти.</desc>
+  <desc id="description">Гость и наблюдатель просматривают плитку и ленту и фильтруют даты. Гость может войти. Наблюдатель может сохранить черновик, опубликовать дату, изменить лайк, удалить свою дату и выйти.</desc>
   <style>
     text { font-family: system-ui, sans-serif; fill: #17335a; text-anchor: middle; font-size: 17px; }
     .actor, .association { fill: none; stroke: #6987a2; stroke-width: 1.65; stroke-linecap: round; }
@@ -11,14 +11,13 @@
   <rect width="980" height="800" rx="22" fill="#f0f5f9"/>
   <rect x="210" y="32" width="560" height="736" rx="20" fill="#fff" stroke="#a6bed1" stroke-width="1.4"/>
   <text x="490" y="75" class="title">React · даты сближений астероидов</text>
-  <path d="M149 256 L341 130 M149 256 L341 195 M149 256 L341 260 M149 256 L341 325 M149 256 L341 390" class="association"/>
+  <path d="M149 256 L341 130 M149 256 L341 195 M149 256 L341 260 M149 256 L341 325" class="association"/>
   <path d="M831 443 L639 130 M831 443 L639 195 M831 443 L639 260 M831 443 L639 455 M831 443 L639 520 M831 443 L639 585 M831 443 L639 650 M831 443 L639 715" class="association"/>
   <g>
     <ellipse cx="490" cy="130" rx="150" ry="23" class="use-case"/><text x="490" y="136">Открыть плитку дат</text>
     <ellipse cx="490" cy="195" rx="150" ry="23" class="use-case"/><text x="490" y="201">Смотреть ленту</text>
     <ellipse cx="490" cy="260" rx="150" ry="23" class="use-case"/><text x="490" y="266">Фильтровать по месяцу</text>
-    <ellipse cx="490" cy="325" rx="150" ry="23" class="use-case"/><text x="490" y="331">Зарегистрироваться</text>
-    <ellipse cx="490" cy="390" rx="150" ry="23" class="use-case"/><text x="490" y="396">Войти</text>
+    <ellipse cx="490" cy="325" rx="150" ry="23" class="use-case"/><text x="490" y="331">Войти</text>
     <ellipse cx="490" cy="455" rx="150" ry="23" class="use-case"/><text x="490" y="461">Сохранить черновик</text>
     <ellipse cx="490" cy="520" rx="150" ry="23" class="use-case"/><text x="490" y="526">Опубликовать дату</text>
     <ellipse cx="490" cy="585" rx="150" ry="23" class="use-case"/><text x="490" y="591">Поставить или снять лайк</text>

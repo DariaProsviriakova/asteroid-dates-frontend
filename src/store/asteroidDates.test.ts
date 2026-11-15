@@ -22,6 +22,7 @@ describe('Redux и запросы к каталогу', () => {
     expect(store.getState().dates.list.data.map(date => date.id)).toEqual([2, 3]);
 
     store.dispatch(signedIn(observer));
+    expect(store.getState().auth).toMatchObject({ status: 'creator', observer });
     await store.dispatch(loadPublishedAsteroidDates());
     expect(list.mock.lastCall?.[1]).not.toHaveProperty('headers');
     expect(store.getState().dates.list).toMatchObject({ status: 'failed', source: null, data: [] });

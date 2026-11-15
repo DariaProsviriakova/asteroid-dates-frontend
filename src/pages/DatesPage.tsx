@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { DateCard } from '../components/DateCard';
 import { DatesFilter } from '../components/DatesFilter';
 import { DateSource } from '../components/DateSource';
@@ -25,7 +24,7 @@ export function DatesPage() {
 
   return <main className="dates-page" id="main-content">
     <header className="dates-header"><h1>ВЫБОР ДАТЫ</h1>
-      {observer ? <span className="observer-name">{observer.fullName}</span> : <Link className="registration-link" to="/register">Регистрация</Link>}
+      {observer && <span className="observer-name">{observer.fullName}</span>}
     </header>
     <DatesFilter filters={filters} onApply={values => {
       if (values.maxMonth === filters.maxMonth) refresh(previous => previous + 1);

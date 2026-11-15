@@ -121,11 +121,6 @@ export interface GetFeedDateParams {
   next?: boolean;
 }
 
-export interface DeleteDateParams {
-  /** @min 1 */
-  id: number;
-}
-
 export interface SetLikeParams {
   /** @min 1 */
   id: number;
@@ -427,24 +422,6 @@ export class Api<
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Логическое удаление: status=deleted. Чужие записи изменять нельзя.
-     *
-     * @tags Даты сближения астероидов
-     * @name DeleteDate
-     * @summary Удалить собственную дату
-     * @request DELETE:/api/dates/{id}
-     * @secure
-     */
-    deleteDate: ({ id }: DeleteDateParams, params: RequestParams = {}) =>
-      this.request<any, void>({
-        path: `/api/dates/${id}`,
-        method: "DELETE",
-        secure: true,
         format: "json",
         ...params,
       }),
