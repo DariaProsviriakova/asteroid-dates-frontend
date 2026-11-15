@@ -9,7 +9,7 @@ import { FeedPage } from './pages/FeedPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { clearDateActionError } from './store/asteroidDatesSlice';
-import { clearAuthError } from './store/authSlice';
+import { AUTH_STATUS, clearAuthError } from './store/authSlice';
 import { selectBusy, useAppDispatch, useAppSelector } from './store/store';
 
 function FeedAlias() {
@@ -24,7 +24,7 @@ function DateAlias() {
 }
 
 function ProtectedAddDate() {
-  const isGuest = useAppSelector(state => state.auth.status === 'guest');
+  const isGuest = useAppSelector(state => state.auth.status === AUTH_STATUS.GUEST);
   return isGuest ? <Navigate to="/login" state={{ fromAdd: true }} replace /> : <AddDatePage />;
 }
 

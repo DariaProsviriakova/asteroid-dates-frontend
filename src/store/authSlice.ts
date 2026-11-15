@@ -1,16 +1,18 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Observer } from '../types/observer';
 
+export const AUTH_STATUS = { GUEST: 0, CREATOR: 1 } as const;
+
 type AuthOperation = 'login' | 'logout';
 export interface AuthState {
   observer: Observer | null;
-  status: 'guest' | 'creator';
+  status: (typeof AUTH_STATUS)[keyof typeof AUTH_STATUS];
   pending: AuthOperation | null;
   error: string | null;
 }
 
-// Профиль живёт в памяти. Cookie с идентификатором сессии хранит браузер.
-const initialState: AuthState = { observer: null, status: 'guest', pending: null, error: null };
+// Redux не восстанавливается из хранилищ браузера; после F5 снова GUEST.
+const initialState: AuthState = { observer: null, status: AUTH_STATUS.GUEST, pending: null, error: null };
 
 const authSlice = createSlice({
   name: 'auth',
@@ -25,7 +27,7 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
     signedIn(_state, action: PayloadAction<Observer>): AuthState {
-      return { ...initialState, observer: action.payload, status: 'creator' };
+      return { ...initialState, observer: action.payload, status: AUTH_STATUS.CREATOR };
     },
     signedOut: () => initialState,
     sessionExpired: (): AuthState => ({ ...initialState, error: 'Сессия истекла. Войдите снова.' }),

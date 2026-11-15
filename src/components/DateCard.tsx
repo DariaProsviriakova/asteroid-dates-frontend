@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import type { AsteroidDate } from '../types/date';
 import { formatApproach, formatDistance } from '../lib/format';
 import { deleteAsteroidDate } from '../store/asteroidDatesThunks';
+import { AUTH_STATUS } from '../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { DateImage } from './DateMedia';
 import { DateLike } from './DateLike';
 
 export function DateCard({ date }: { date: AsteroidDate }) {
-  const isUser = useAppSelector(state => state.auth.status === 'creator');
+  const isUser = useAppSelector(state => state.auth.status === AUTH_STATUS.CREATOR);
   const dispatch = useAppDispatch();
   const canDelete = isUser && date.isCreator === 1;
   const href = '/dates/feed/' + date.id;

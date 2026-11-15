@@ -1,9 +1,10 @@
 import { setAsteroidDateLike } from '../store/asteroidDatesThunks';
+import { AUTH_STATUS } from '../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import type { AsteroidDate } from '../types/date';
 
 export function DateLike({ date, inFeed = false }: { date: AsteroidDate; inFeed?: boolean }) {
-  const isUser = useAppSelector(state => state.auth.status === 'creator');
+  const isUser = useAppSelector(state => state.auth.status === AUTH_STATUS.CREATOR);
   const dispatch = useAppDispatch();
   const liked = isUser && date.isLiked === 1;
   const className = inFeed ? 'like-stack' : 'card-like';

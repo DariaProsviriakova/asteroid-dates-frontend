@@ -4,7 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { apiErrorMessage, apiStatus } from '../api/errors';
 import { loginObserver } from '../api/observers';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
-import { clearAuthError, requestFailed, requestStarted, signedIn } from '../store/authSlice';
+import { AUTH_STATUS, clearAuthError, requestFailed, requestStarted, signedIn } from '../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
 export function LoginPage() {
@@ -16,7 +16,7 @@ export function LoginPage() {
   const { state } = useLocation();
   const destination = state?.fromAdd ? '/dates/add' : '/dates';
 
-  if (status === 'creator') return <Navigate to={destination} replace />;
+  if (status === AUTH_STATUS.CREATOR) return <Navigate to={destination} replace />;
 
   return <main className="form-page" id="main-content">
     <header className="page-header"><h1>ВХОД</h1></header>

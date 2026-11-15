@@ -5,7 +5,7 @@ import type { GetFeedDateParams, PublishDateDto } from '../api/generated/Asteroi
 import { filterDates } from '../lib/filters';
 import { mockDates } from '../mocks/dates';
 import type { AsteroidDate, DatesFilters } from '../types/date';
-import { sessionExpired, type AuthState } from './authSlice';
+import { AUTH_STATUS, sessionExpired, type AuthState } from './authSlice';
 
 export type DateSource = 'backend' | 'mock';
 interface DateRead<T> { data: T; source: DateSource }
@@ -19,7 +19,7 @@ const datesThunk = createAsyncThunk.withTypes<{
 export const loadPublishedAsteroidDates = datesThunk<DateRead<AsteroidDate[]>, void>(
   'dates/loadPublishedAsteroidDates', async (_, { getState, signal, rejectWithValue }) => {
     const { auth, dates: { filters } } = getState();
-    const isGuest = auth.status === 'guest';
+    const isGuest = auth.status === AUTH_STATUS.GUEST;
     try {
       const { data } = await asteroidDatesApi.listPublishedDates({ maxMonth: filters.maxMonth }, dateReadConfig(signal, isGuest));
       return { data: data.data, source: 'backend' };
@@ -34,7 +34,7 @@ export const loadPublishedAsteroidDates = datesThunk<DateRead<AsteroidDate[]>, v
 
 export const loadAsteroidFeedDate = datesThunk<DateRead<AsteroidDate | null>, GetFeedDateParams>(
   'dates/loadAsteroidFeedDate', async (query, { getState, signal, rejectWithValue }) => {
-    const isGuest = getState().auth.status === 'guest';
+    const isGuest = getState().auth.status === AUTH_STATUS.GUEST;
     try {
       const { data } = await asteroidDatesApi.getFeedDate(query, dateReadConfig(signal, isGuest));
       return { data: data.data[0] ?? null, source: 'backend' };
@@ -55,7 +55,7 @@ function protectedAsteroidRequest<Arg, Result>(
   action: string, fallback: string, request: (arg: Arg, signal: AbortSignal) => Promise<Result>,
 ) {
   return datesThunk<Result, Arg>(`dates/${action}`, async (arg, { getState, dispatch, signal, rejectWithValue }) => {
-    if (getState().auth.status === 'guest') return rejectWithValue('Войдите, чтобы выполнить это действие.');
+    if (getState().auth.status === AUTH_STATUS.GUEST) return rejectWithValue('Войдите, чтобы выполнить это действие.');
     try {
       return await request(arg, signal);
     } catch (error) {

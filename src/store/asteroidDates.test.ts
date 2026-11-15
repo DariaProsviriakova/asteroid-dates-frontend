@@ -22,7 +22,7 @@ describe('Redux и запросы к каталогу', () => {
     expect(store.getState().dates.list.data.map(date => date.id)).toEqual([2, 3]);
 
     store.dispatch(signedIn(observer));
-    expect(store.getState().auth).toMatchObject({ status: 'creator', observer });
+    expect(store.getState().auth).toMatchObject({ status: 1, observer });
     await store.dispatch(loadPublishedAsteroidDates());
     expect(list.mock.lastCall?.[1]).not.toHaveProperty('headers');
     expect(store.getState().dates.list).toMatchObject({ status: 'failed', source: null, data: [] });
@@ -60,7 +60,7 @@ describe('Redux и запросы к каталогу', () => {
     store.dispatch(signedOut());
     serverFailed();
     await pending;
-    expect(store.getState().auth).toMatchObject({ status: 'guest', observer: null });
+    expect(store.getState().auth).toMatchObject({ status: 0, observer: null });
     expect(store.getState().dates).toMatchObject({ filters: { maxMonth: 12 }, list: { status: 'idle', error: null } });
   });
 });

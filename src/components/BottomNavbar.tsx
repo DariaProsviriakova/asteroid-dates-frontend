@@ -2,11 +2,11 @@ import { Nav, Navbar } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { apiErrorMessage, apiStatus } from '../api/errors';
 import { logoutObserver } from '../api/observers';
-import { clearAuthError, requestFailed, requestStarted, signedOut } from '../store/authSlice';
+import { AUTH_STATUS, clearAuthError, requestFailed, requestStarted, signedOut } from '../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
 export function BottomNavbar() {
-  const isGuest = useAppSelector(state => state.auth.status === 'guest');
+  const isGuest = useAppSelector(state => state.auth.status === AUTH_STATUS.GUEST);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
