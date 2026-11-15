@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { DateImage, DateVideo } from '../components/DateMedia';
 import { ErrorState } from '../components/ResourceState';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
-import { clearDateActionError } from '../store/asteroidDatesSlice';
 import { loadAsteroidDateDraft, publishAsteroidDate, saveAsteroidDateDraft } from '../store/asteroidDatesThunks';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
@@ -43,20 +42,19 @@ export function AddDatePage() {
   const pageRef = useRef<HTMLElement>(null);
   const { data: draft, error, status } = useAppSelector(state => state.dates.draft);
   const [revision, refresh] = useState(0);
-  const [editingDraft, setEditingDraft] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const imagePreview = useFilePreview(imageFile);
   const videoPreview = useFilePreview(videoFile);
-  const showPublishStep = draft !== null && !editingDraft;
+  const hasDraft = draft !== null;
 
   useEffect(() => {
     const request = dispatch(loadAsteroidDateDraft());
     return () => request.abort();
   }, [dispatch, revision]);
 
-  useEffect(() => { pageRef.current?.scrollTo(0, 0); }, [showPublishStep]);
+  useEffect(() => { pageRef.current?.scrollTo(0, 0); }, [hasDraft]);
 
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -74,7 +72,6 @@ export function AddDatePage() {
     if (saveAsteroidDateDraft.fulfilled.match(result)) {
       setImageFile(null);
       setVideoFile(null);
-      setEditingDraft(false);
     }
   }
 
@@ -84,22 +81,13 @@ export function AddDatePage() {
     const shortDescription = String(data.get('shortDescription') ?? '').trim();
     const approachMonth = Number(data.get('approachMonth'));
     const approachDay = Number(data.get('approachDay'));
-    const distance = String(data.get('minimumDistanceAu') ?? '');
     setFormError(null);
     if (!shortDescription) return setFormError('Введите описание сближения.');
     if (new Date(Date.UTC(2026, approachMonth - 1, approachDay)).getUTCMonth() + 1 !== approachMonth) {
       return setFormError('Проверьте месяц и день сближения.');
     }
-    const result = await dispatch(publishAsteroidDate({ shortDescription, approachMonth, approachDay,
-      ...(distance === '' ? {} : { minimumDistanceAu: Number(distance) }),
-    }));
+    const result = await dispatch(publishAsteroidDate({ shortDescription, approachMonth, approachDay }));
     if (publishAsteroidDate.fulfilled.match(result)) navigate(`/dates/feed/${result.payload.id}`, { replace: true });
-  }
-
-  function editDraft() {
-    setFormError(null);
-    dispatch(clearDateActionError());
-    setEditingDraft(true);
   }
 
   return <main className="form-page add-date-page" id="main-content" ref={pageRef}>
@@ -107,27 +95,27 @@ export function AddDatePage() {
     {error && <ErrorState message={error} onRetry={() => refresh(previous => previous + 1)} />}
     {status === 'succeeded' && <>
       {formError && <Alert variant="danger">{formError}</Alert>}
-      {!showPublishStep && <form className="draft-form create-draft-form" aria-label="Фото, видео и название" onSubmit={save}>
+      {!draft && <form className="draft-form create-draft-form" aria-label="Фото, видео и название" onSubmit={save}>
         <MediaField title="Фото объекта" control={<>
           <strong>Выбрать фото</strong>
           <input className="file-control" type="file" aria-label="Выбрать фото" accept="image/png,image/jpeg,image/gif,image/webp" onChange={event => setImageFile(event.target.files?.[0] ?? null)} />
         </>}>
-          <DateImage src={imagePreview ?? draft?.imageUrl ?? null} alt="Фото астероида" loading="eager" />
+          <DateImage src={imagePreview} alt="Фото астероида" loading="eager" />
         </MediaField>
         <MediaField title="Видео объекта" control={<>
           <strong>Выбрать видео</strong>
           <input className="file-control" type="file" aria-label="Выбрать видео" accept="video/mp4,video/webm,video/quicktime" onChange={event => setVideoFile(event.target.files?.[0] ?? null)} />
         </>}>
-          <DateVideo src={videoPreview ?? draft?.videoUrl ?? null} poster={imagePreview ?? draft?.imageUrl ?? null}
-            designation={draft?.designation ?? 'из формы добавления'} className="upload-video" ambient />
+          <DateVideo src={videoPreview} poster={imagePreview}
+            designation="из формы добавления" className="upload-video" ambient />
         </MediaField>
         <label className="field-block">
           <span>Название астероида</span>
-          <input name="designation" defaultValue={draft?.designation} maxLength={120} required placeholder="Например: 2026 KJ" />
+          <input name="designation" maxLength={120} required placeholder="Например: 2026 KJ" />
         </label>
         <Button type="submit" className="primary-button">Далее</Button>
       </form>}
-      {draft && <form key={draft.id} hidden={!showPublishStep} className="draft-form publish-draft-form" aria-label="Публикация даты" onSubmit={publish}>
+      {draft && <form key={draft.id} className="draft-form publish-draft-form" aria-label="Публикация даты" onSubmit={publish}>
         <MediaField title="Фото объекта"><DateImage src={draft.imageUrl} alt={draft.designation} loading="eager" /></MediaField>
         <MediaField title="Видео объекта">
           <DateVideo src={draft.videoUrl} poster={draft.imageUrl} designation={draft.designation} className="upload-video" ambient />
@@ -147,12 +135,7 @@ export function AddDatePage() {
             <input name="approachDay" type="number" min={1} max={31} step={1} defaultValue={draft.approachDay ?? undefined} placeholder="12" required />
           </label>
         </div>
-        <label className="field-block">
-          <span>Минимальное расстояние, а.е.</span>
-          <input name="minimumDistanceAu" type="number" min="0.00001" max="999.99999" step="0.00001" defaultValue={draft.minimumDistanceAu ?? undefined} />
-        </label>
         <Button type="submit" className="primary-button">Опубликовать</Button>
-        <button type="button" className="return-to-draft" onClick={editDraft}>Назад</button>
       </form>}
     </>}
   </main>;

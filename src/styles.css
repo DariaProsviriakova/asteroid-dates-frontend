@@ -67,5 +67,3 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 .add-date-page .upload-box > .media-unavailable { position: absolute; inset: 8px; }
 .add-date-page .upload-box > .media-unavailable img { inset: 0; width: 100%; height: 100%; }
 .add-date-page .media-unavailable > span { bottom: 8px; }
-.return-to-draft { justify-self: center; padding: 6px 12px; border: 0; background: transparent; color: var(--ink); }
-.return-to-draft:hover { text-decoration: underline; }
