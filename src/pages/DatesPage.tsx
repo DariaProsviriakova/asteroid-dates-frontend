@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { DateCard } from '../components/DateCard';
 import { DatesFilter } from '../components/DatesFilter';
-import { DateSource } from '../components/DateSource';
 import { ErrorState } from '../components/ResourceState';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { DEFAULT_FILTERS } from '../lib/filters';
@@ -32,7 +31,6 @@ export function DatesPage() {
     }} />
     {list.status === 'failed' && list.error && <ErrorState message={list.error} onRetry={() => refresh(previous => previous + 1)} />}
     {list.status === 'succeeded' && <>
-      <DateSource source={list.source} />
       {list.data.length === 0 ? <div className="empty-list"><p>До месяца {filters.maxMonth} ничего не найдено.</p>
         {filters.maxMonth !== DEFAULT_FILTERS.maxMonth && <Button className="filter-button" onClick={() => dispatch(maxMonthChanged(DEFAULT_FILTERS.maxMonth))}>Сбросить фильтр</Button>}
       </div> : <section className="dates-grid" aria-label="Список дат">{list.data.map(date => <DateCard key={date.id} date={date} />)}</section>}

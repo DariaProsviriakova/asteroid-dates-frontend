@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { DateLike } from '../components/DateLike';
 import { DateVideo } from '../components/DateMedia';
-import { DateSource } from '../components/DateSource';
 import { ErrorState } from '../components/ResourceState';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { formatApproach, formatDistance } from '../lib/format';
@@ -20,7 +19,7 @@ export function FeedPage() {
   const id = rawId === undefined ? undefined : Number(rawId);
   const invalidId = id !== undefined && (!Number.isSafeInteger(id) || id < 1 || !/^\d+$/.test(rawId ?? ''));
   const next = params.get('next') === 'true';
-  const { data: date, status, error, source } = useAppSelector(state => state.dates.feed);
+  const { data: date, status, error } = useAppSelector(state => state.dates.feed);
   const auth = useAppSelector(state => state.auth.status);
   const [revision, refresh] = useState(0);
 
@@ -36,7 +35,6 @@ export function FeedPage() {
     {status === 'succeeded' && date && <>
       <div className="feed-media"><DateVideo src={date.videoUrl} poster={date.imageUrl} designation={date.designation} ambient /></div>
       <div className="feed-shade" />
-      <DateSource source={source} inFeed />
       <section className="feed-content">
         <p className="feed-designation">{date.designation}</p>
         <h1>МИНИМАЛЬНОЕ РАССТОЯНИЕ ДО ЗЕМЛИ</h1>
