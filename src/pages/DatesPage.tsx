@@ -1,5 +1,5 @@
 import { Button } from 'react-bootstrap';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { DateCard } from '../components/DateCard';
 import { DatesFilter } from '../components/DatesFilter';
 import { ErrorState, LoadingState } from '../components/ResourceState';
@@ -16,7 +16,7 @@ export function DatesPage() {
   const { data, loading, error, reload } = useDates<AsteroidDate[]>('/api/dates' + (query ? '?' + query : ''));
 
   return <main className="dates-page" id="main-content">
-    <header className="dates-header"><h1>ВЫБОР ДАТЫ</h1><Link className="registration-link" to="/register">Регистрация</Link></header>
+    <header className="dates-header"><h1>ВЫБОР ДАТЫ</h1></header>
     <DatesFilter filters={filters} onApply={values => setParams(serializeFilters(values))} />
     <div aria-live="polite" aria-busy={loading}>
       {loading && <LoadingState />}

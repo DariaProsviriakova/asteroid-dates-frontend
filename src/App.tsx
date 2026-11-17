@@ -3,7 +3,6 @@ import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-do
 import { BottomNavbar } from './components/BottomNavbar';
 import { DatesPage } from './pages/DatesPage';
 import { FeedPage } from './pages/FeedPage';
-import { RegistrationPage } from './pages/RegistrationPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 function FeedAlias() {
@@ -30,7 +29,6 @@ export function App() {
       <Route path="/dates/feed/:id" element={<FeedPage />} />
       <Route path="/feed" element={<FeedAlias />} />
       <Route path="/dates/:id" element={<DateAlias />} />
-      <Route path="/register" element={<RegistrationPage />} />
       <Route path="/login" element={<Navigate to="/dates" replace />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

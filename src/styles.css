@@ -21,7 +21,6 @@
 .tab-bar .tab-link.disabled { color: #fff; opacity: .45; cursor: default; }
 .tab-link.disabled:hover::after { background: transparent; }
 .dates-header { flex-wrap: wrap; }
-.registration-link { margin-left: auto; color: var(--ink); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
 .filter-form label { margin: 0; }
 .filter-form input[type="range"] { margin: 2px; }
 .primary-button, .filter-button { line-height: normal; }
@@ -44,10 +43,6 @@
 .field-block { display: block; margin: 0; }
 .field-block .form-control { line-height: normal; }
 .field-block input:focus { border-color: var(--ink); box-shadow: 0 0 0 3px #153f8c15; }
-.registration-form { display: grid; gap: 20px; }
-.registration-form .invalid-feedback { font-size: 13px; line-height: 1.4; }
-.registration-success { color: var(--ink); line-height: 1.5; }
-.registration-success h2 { font-size: 23px; font-weight: 900; margin-bottom: 18px; }
 .not-found-page h1 { font-size: 25px; font-weight: 900; margin-bottom: 24px; }
 .startup-error { max-width: 498px; margin: 24px auto; padding: 28px; background: white; }
 .skip-link { position: fixed; top: -100px; left: 20px; z-index: 100; padding: 12px; background: white; color: var(--ink); }
