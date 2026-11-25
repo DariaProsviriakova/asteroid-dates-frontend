@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import { Alert } from 'react-bootstrap';
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { BottomNavbar } from './components/BottomNavbar';
+import { NotFoundState } from './components/NotFoundState';
 import { LoadingState } from './components/ResourceState';
 import { AddDatePage } from './pages/AddDatePage';
 import { DatesPage } from './pages/DatesPage';
 import { FeedPage } from './pages/FeedPage';
 import { LoginPage } from './pages/LoginPage';
-import { NotFoundPage } from './pages/NotFoundPage';
 import { clearDateActionError } from './store/asteroidDatesSlice';
 import { AUTH_STATUS, clearAuthError } from './store/authSlice';
 import { selectBusy, useAppDispatch, useAppSelector } from './store/store';
@@ -53,7 +53,7 @@ export function App() {
         <Route path="/feed" element={<FeedAlias />} />
         <Route path="/dates/:id" element={<DateAlias />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<NotFoundState />} />
       </Routes>
       <BottomNavbar />
       {(mutationError || showAuthError) && <Alert className="app-request-error" variant="danger" dismissible onClose={() => {

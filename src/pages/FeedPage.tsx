@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { DateLike } from '../components/DateLike';
 import { DateVideo } from '../components/DateMedia';
+import { NotFoundState } from '../components/NotFoundState';
 import { ErrorState } from '../components/ResourceState';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { formatApproach, formatDistance } from '../lib/format';
 import { loadAsteroidFeedDate } from '../store/asteroidDatesThunks';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { NotFoundPage } from './NotFoundPage';
 
 export function FeedPage() {
   useDocumentTitle('Лента');
@@ -29,7 +29,7 @@ export function FeedPage() {
     return () => request.abort();
   }, [dispatch, id, invalidId, next, auth, revision]);
 
-  if (invalidId || (status === 'succeeded' && !date)) return <NotFoundPage />;
+  if (invalidId || (status === 'succeeded' && !date)) return <NotFoundState />;
   return <main className="feed-page" id="main-content" data-date-id={date?.id}>
     {status === 'failed' && error && <ErrorState message={error} onRetry={() => refresh(previous => previous + 1)} />}
     {status === 'succeeded' && date && <>
