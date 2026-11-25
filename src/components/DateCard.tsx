@@ -29,6 +29,7 @@ export function DateCard({ date }: { date: AsteroidDate }) {
             if (window.confirm(`Удалить дату «${date.designation}»?`)) void dispatch(deleteAsteroidDate(date.id));
           }}>×</button>
       </div>
+      <Link className="card-details" to={href} aria-label={'Подробнее об астероиде ' + date.designation}>Подробнее</Link>
     </Card.Body>
   </Card>;
 }

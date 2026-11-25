@@ -2,6 +2,7 @@ import { Nav, Navbar } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { apiErrorMessage, apiStatus } from '../api/errors';
 import { logoutObserver } from '../api/observers';
+import { IS_PAGES } from '../deployment';
 import { AUTH_STATUS, clearAuthError, requestFailed, requestStarted, signedOut } from '../store/authSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 
@@ -24,14 +25,14 @@ export function BottomNavbar() {
     navigate('/dates', { replace: true });
   }
 
-  return <Navbar className="tab-bar" aria-label="Основная навигация">
+  return <Navbar className={IS_PAGES ? 'tab-bar tab-bar-public' : 'tab-bar'} aria-label="Основная навигация">
     <Nav.Link as={NavLink} to="/dates/feed" className="tab-link">Лента</Nav.Link>
-    {isGuest
+    {!IS_PAGES && (isGuest
       ? <button type="button" disabled className="tab-link disabled" title="Войдите, чтобы добавить дату">Добавление</button>
-      : <Nav.Link as={NavLink} to="/dates/add" className="tab-link">Добавление</Nav.Link>}
+      : <Nav.Link as={NavLink} to="/dates/add" className="tab-link">Добавление</Nav.Link>)}
     <Nav.Link as={NavLink} to="/dates" end className="tab-link">Плитка</Nav.Link>
-    {isGuest
+    {!IS_PAGES && (isGuest
       ? <Nav.Link as={NavLink} to="/login" className="tab-link" onClick={() => dispatch(clearAuthError())}>Вход</Nav.Link>
-      : <button type="button" className="tab-link" onClick={logout}>Выход</button>}
+      : <button type="button" className="tab-link" onClick={logout}>Выход</button>)}
   </Navbar>;
 }

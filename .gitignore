@@ -1,5 +1,7 @@
 node_modules/
 dist/
+dist-pages/
+certificates/
 .env
 .env.*
 !.env.example

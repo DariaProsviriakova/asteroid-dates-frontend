@@ -21,7 +21,7 @@ export function DatesPage() {
     return () => request.abort();
   }, [dispatch, filters.maxMonth, status, revision]);
 
-  return <main className="dates-page" id="main-content">
+  return <main className="dates-page" id="main-content" tabIndex={-1}>
     <header className="dates-header"><h1>ВЫБОР ДАТЫ</h1>
       {observer && <span className="observer-name">{observer.fullName}</span>}
     </header>

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { DateLike } from '../components/DateLike';
-import { DateVideo } from '../components/DateMedia';
+import { DateImage, DateVideo } from '../components/DateMedia';
 import { NotFoundState } from '../components/NotFoundState';
 import { ErrorState } from '../components/ResourceState';
+import { IS_PAGES } from '../deployment';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { formatApproach, formatDistance } from '../lib/format';
 import { loadAsteroidFeedDate } from '../store/asteroidDatesThunks';
@@ -30,24 +31,28 @@ export function FeedPage() {
   }, [dispatch, id, invalidId, next, auth, revision]);
 
   if (invalidId || (status === 'succeeded' && !date)) return <NotFoundState />;
-  return <main className="feed-page" id="main-content" data-date-id={date?.id}>
+  return <main className="feed-page" id="main-content" tabIndex={-1} data-date-id={date?.id}>
     {status === 'failed' && error && <ErrorState message={error} onRetry={() => refresh(previous => previous + 1)} />}
     {status === 'succeeded' && date && <>
-      <div className="feed-media"><DateVideo src={date.videoUrl} poster={date.imageUrl} designation={date.designation} ambient /></div>
+      <div className="feed-media">{IS_PAGES ? <DateImage src={date.imageUrl} alt="" loading="eager" />
+        : <DateVideo src={date.videoUrl} poster={date.imageUrl} designation={date.designation} ambient />}</div>
       <div className="feed-shade" />
-      <section className="feed-content">
-        <p className="feed-designation">{date.designation}</p>
-        <h1>МИНИМАЛЬНОЕ РАССТОЯНИЕ ДО ЗЕМЛИ</h1>
-        {date.shortDescription && <details className="feed-description" key={date.id}><summary><span>{date.shortDescription}</span></summary></details>}
-      </section>
-      <aside className="feed-side" aria-label="Дата и расстояние сближения">
-        <div className="feed-params"><span>Дата</span><strong>{formatApproach(date.approachDay, date.approachMonth)}</strong><span>Расстояние</span><strong>{formatDistance(date.minimumDistanceAu)}</strong></div>
-        <DateLike date={date} inFeed />
-        <button type="button" className="next-icon-button" aria-label="Следующая дата" onClick={() => {
-          if (id === date.id && next) refresh(previous => previous + 1);
-          else navigate(`/dates/feed?id=${date.id}&next=true`);
-        }}><span aria-hidden="true">→</span></button>
-      </aside>
+      <div className="feed-layout">
+        <section className="feed-content">
+          <Link className="feed-back" to="/dates">← К плитке</Link>
+          <p className="feed-designation">{date.designation}</p>
+          <h1>МИНИМАЛЬНОЕ РАССТОЯНИЕ ДО ЗЕМЛИ</h1>
+          {date.shortDescription && <details className="feed-description" key={date.id}><summary><span>{date.shortDescription}</span></summary></details>}
+        </section>
+        <aside className="feed-side" aria-label="Дата и расстояние сближения">
+          <div className="feed-params"><span>Дата</span><strong>{formatApproach(date.approachDay, date.approachMonth)}</strong><span>Расстояние</span><strong>{formatDistance(date.minimumDistanceAu)}</strong></div>
+          <DateLike date={date} inFeed />
+          <button type="button" className="next-icon-button" aria-label="Следующая дата" onClick={() => {
+            if (id === date.id && next) refresh(previous => previous + 1);
+            else navigate(`/dates/feed?id=${date.id}&next=true`);
+          }}><span aria-hidden="true">→</span></button>
+        </aside>
+      </div>
     </>}
   </main>;
 }

@@ -4,6 +4,7 @@ import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-do
 import { BottomNavbar } from './components/BottomNavbar';
 import { NotFoundState } from './components/NotFoundState';
 import { LoadingState } from './components/ResourceState';
+import { IS_PAGES } from './deployment';
 import { AddDatePage } from './pages/AddDatePage';
 import { DatesPage } from './pages/DatesPage';
 import { FeedPage } from './pages/FeedPage';
@@ -43,16 +44,19 @@ export function App() {
 
   return <div className="app-shell">
     <div className="app-content" inert={busy} aria-busy={busy}>
-      <a className="skip-link" href="#main-content">К содержимому</a>
+      <a className="skip-link" href="#main-content" onClick={event => {
+        event.preventDefault();
+        document.getElementById('main-content')?.focus();
+      }}>К содержимому</a>
       <Routes>
         <Route path="/" element={<Navigate to="/dates" replace />} />
         <Route path="/dates" element={<DatesPage />} />
-        <Route path="/dates/add" element={<ProtectedAddDate />} />
+        <Route path="/dates/add" element={IS_PAGES ? <Navigate to="/dates" replace /> : <ProtectedAddDate />} />
         <Route path="/dates/feed" element={<FeedPage />} />
         <Route path="/dates/feed/:id" element={<FeedPage />} />
         <Route path="/feed" element={<FeedAlias />} />
         <Route path="/dates/:id" element={<DateAlias />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={IS_PAGES ? <Navigate to="/dates" replace /> : <LoginPage />} />
         <Route path="*" element={<NotFoundState />} />
       </Routes>
       <BottomNavbar />

@@ -49,26 +49,21 @@ textarea {
 
 .app-shell {
   position: relative;
-  width: min(100vw, 498px);
+  --page-padding: 16px;
+  --tab-height: calc(64px + env(safe-area-inset-bottom));
+  width: min(100%, 1200px);
   height: 100svh;
+  height: 100dvh;
   min-height: 0;
   margin: 0 auto;
   overflow: hidden;
   background: var(--page);
-  border: 1px solid var(--line);
   box-shadow: var(--shadow);
-}
-
-.feed-page,
-.form-page,
-.dates-page {
-  min-height: 100%;
-  padding-bottom: 92px;
 }
 
 .feed-page {
   position: relative;
-  min-height: 100%;
+  height: 100%;
   color: #ffffff;
   background: #06111e;
 }
@@ -91,12 +86,32 @@ textarea {
     linear-gradient(90deg, rgba(1, 8, 18, 0.58) 0%, rgba(1, 8, 18, 0.12) 58%, rgba(1, 8, 18, 0.44) 100%);
 }
 
-.feed-content {
-  position: absolute;
+.feed-layout {
+  position: relative;
   z-index: 2;
-  right: 96px;
-  bottom: 142px;
-  left: 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(65px, 18vw, 116px);
+  align-content: safe end;
+  align-items: end;
+  gap: 16px;
+  height: 100%;
+  overflow-y: auto;
+  padding: max(16px, env(safe-area-inset-top)) max(var(--page-padding), env(safe-area-inset-right))
+    calc(var(--tab-height) + 20px) max(var(--page-padding), env(safe-area-inset-left));
+}
+
+.feed-content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.feed-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 8px;
+  color: #fff;
+  text-decoration: underline;
 }
 
 .feed-designation {
@@ -108,16 +123,16 @@ textarea {
 }
 
 .feed-content h1 {
-  max-width: 290px;
+  max-width: 620px;
   margin: 0 0 14px;
-  font-size: 30px;
+  font-size: clamp(20px, 4vw, 52px);
   line-height: 1.12;
   font-weight: 900;
   letter-spacing: 0;
 }
 
 .feed-description {
-  max-width: 290px;
+  max-width: 540px;
   margin: 0;
   font-size: 16px;
   line-height: 1.2;
@@ -157,14 +172,9 @@ textarea {
 }
 
 .feed-side {
-  position: absolute;
-  z-index: 3;
-  right: 22px;
-  bottom: 126px;
   display: grid;
   justify-items: center;
-  gap: 18px;
-  width: 78px;
+  gap: clamp(8px, 2vh, 18px);
 }
 
 .feed-params {
@@ -239,17 +249,9 @@ textarea {
 .dates-page {
   height: 100%;
   overflow-y: auto;
+  padding: max(28px, env(safe-area-inset-top)) max(var(--page-padding), env(safe-area-inset-right))
+    calc(var(--tab-height) + 24px) max(var(--page-padding), env(safe-area-inset-left));
   background: #ffffff;
-  scrollbar-width: none;
-}
-
-.form-page::-webkit-scrollbar,
-.dates-page::-webkit-scrollbar {
-  display: none;
-}
-
-.form-page {
-  padding: 28px 28px 104px;
 }
 
 .page-header,
@@ -435,10 +437,6 @@ textarea {
   filter: brightness(1.08);
 }
 
-.dates-page {
-  padding: 34px 28px 104px;
-}
-
 .dates-header {
   margin-bottom: 28px;
 }
@@ -451,6 +449,7 @@ textarea {
 
 .filter-form input[type="range"] {
   height: 48px;
+  margin-inline: 0;
   padding: 0 12px;
   accent-color: var(--ink);
 }
@@ -482,8 +481,8 @@ textarea {
 
 .dates-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px 20px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
 }
 
 .asteroid-card {
@@ -515,7 +514,7 @@ textarea {
 }
 
 .card-body {
-  padding: 10px 14px 12px;
+  padding: 10px clamp(10px, 3vw, 14px) 12px;
 }
 
 .card-object {
@@ -538,7 +537,7 @@ textarea {
   display: block;
   margin-bottom: 7px;
   color: var(--ink);
-  font-size: 22px;
+  font-size: clamp(18px, 3vw, 22px);
   line-height: 1.1;
   overflow-wrap: anywhere;
 }
@@ -548,6 +547,15 @@ textarea {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+}
+
+.card-details {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
 }
 
 .card-like {
@@ -605,8 +613,9 @@ textarea {
   left: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  height: 76px;
-  padding: 0 28px;
+  height: var(--tab-height);
+  padding: 0 max(8px, env(safe-area-inset-right)) env(safe-area-inset-bottom)
+    max(8px, env(safe-area-inset-left));
   background: var(--nav);
   color: #ffffff;
 }
@@ -616,13 +625,13 @@ textarea {
   display: grid;
   place-items: center;
   min-width: 0;
-  font-size: 16px;
+  font-size: clamp(12px, 3.5vw, 16px);
 }
 
 .tab-link::after {
   content: "";
   position: absolute;
-  bottom: 16px;
+  bottom: 12px;
   left: 50%;
   width: 48px;
   height: 3px;
@@ -636,42 +645,56 @@ textarea {
   background: #ffffff;
 }
 
-@media (min-width: 700px) {
-  body {
-    padding: 24px;
-  }
-
-  .app-shell {
-    height: 1080px;
-    min-height: 1080px;
-    border-radius: 8px;
+@media (min-width: 360px) {
+  .dates-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 380px) {
-  .feed-content {
-    right: 90px;
-    left: 22px;
+@media (min-width: 768px) {
+  body {
+    padding: 12px;
   }
 
-  .feed-content h1 {
-    font-size: 29px;
-  }
-
-  .field-block input,
-  .field-block textarea {
-    font-size: 18px;
+  .app-shell {
+    --page-padding: 24px;
+    height: calc(100svh - 24px);
+    height: calc(100dvh - 24px);
+    border: 1px solid var(--line);
+    border-radius: 8px;
   }
 
   .dates-grid {
-    gap: 14px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
   }
 
-  .card-body {
-    padding: 12px 10px 9px;
+  .filter-form {
+    grid-template-columns: minmax(0, 1fr) auto;
+    max-width: 680px;
+    align-items: center;
   }
 
-  .card-body strong {
-    font-size: 19px;
+  .draft-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .draft-form > :not(.media-fields) {
+    grid-column: 1 / -1;
+  }
+
+  .topic-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .app-shell {
+    --page-padding: 32px;
+  }
+
+  .dates-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
   }
 }

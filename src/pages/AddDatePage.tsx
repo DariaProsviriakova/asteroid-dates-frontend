@@ -90,7 +90,7 @@ export function AddDatePage() {
     if (publishAsteroidDate.fulfilled.match(result)) navigate(`/dates/feed/${result.payload.id}`, { replace: true });
   }
 
-  return <main className="form-page add-date-page" id="main-content" ref={pageRef}>
+  return <main className="form-page add-date-page" id="main-content" ref={pageRef} tabIndex={-1}>
     <header className="page-header"><h1>ДОБАВЛЕНИЕ</h1></header>
     {error && <ErrorState message={error} onRetry={() => refresh(previous => previous + 1)} />}
     {status === 'succeeded' && <>

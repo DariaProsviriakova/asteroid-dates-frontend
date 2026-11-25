@@ -1,7 +1,10 @@
-export const DEFAULT_IMAGE = '/media/default-date.png';
-export const DEFAULT_VIDEO = '/media/default-date.mp4';
+import { IS_PAGES } from '../deployment';
+
+export const DEFAULT_IMAGE = import.meta.env.BASE_URL + 'media/default-date.png';
+export const DEFAULT_VIDEO = import.meta.env.BASE_URL + 'media/default-date.mp4';
 
 export function resolveMedia(url: string | null | undefined, fallback: string): string {
+  if (IS_PAGES) return fallback;
   const value = url?.trim();
   if (!value) return fallback;
 

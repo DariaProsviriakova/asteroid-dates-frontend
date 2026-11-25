@@ -18,7 +18,7 @@ export function LoginPage() {
 
   if (status === AUTH_STATUS.CREATOR) return <Navigate to={destination} replace />;
 
-  return <main className="form-page" id="main-content">
+  return <main className="form-page login-page" id="main-content" tabIndex={-1}>
     <header className="page-header"><h1>ВХОД</h1></header>
     <Form className="observer-form" onSubmit={async event => {
       event.preventDefault();

@@ -2,5 +2,5 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export function NotFoundState() {
   useDocumentTitle('Дата не найдена');
-  return <main className="form-page not-found-page" id="main-content"><h1>Эта дата не найдена</h1><p>Дата удалена или недоступна.</p></main>;
+  return <main className="form-page not-found-page" id="main-content" tabIndex={-1}><h1>Эта дата не найдена</h1><p>Дата удалена или недоступна.</p></main>;
 }
