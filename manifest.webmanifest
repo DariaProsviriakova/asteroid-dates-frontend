@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "Asteroid Dates — даты сближений",
+  "short_name": "Asteroid Dates",
+  "lang": "ru",
+  "start_url": "./#/dates",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#004b61",
+  "background_color": "#ffffff",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
