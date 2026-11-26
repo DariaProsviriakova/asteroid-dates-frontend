@@ -1,7 +1,7 @@
 const scope = self.registration.scope;
 const cachePrefix = 'asteroid-dates-pwa:' + scope + ':';
-const cacheName = cachePrefix + '53f554f37d4b32de';
-const assets = new Set(["index.html","bundle/index-BnJpoB8A.js","bundle/index-CTtefiZm.css","favicon.svg","manifest.webmanifest","icons/icon-192.png","icons/icon-512.png","media/default-date.png"].map(file => new URL(file, scope).href));
+const cacheName = cachePrefix + 'f9f38342cc9cb338';
+const assets = new Set(["index.html","bundle/index-BPvVn2Mu.css","bundle/index-yWBvA3MC.js","favicon.svg","manifest.webmanifest","icons/icon-192.png","icons/icon-512.png","media/default-date.png"].map(file => new URL(file, scope).href));
 const entry = new URL('index.html', scope).href;
 
 self.addEventListener('install', event => {
