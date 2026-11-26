@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { DateLike } from '../components/DateLike';
 import { DateImage, DateVideo } from '../components/DateMedia';
 import { NotFoundState } from '../components/NotFoundState';
@@ -39,7 +39,6 @@ export function FeedPage() {
       <div className="feed-shade" />
       <div className="feed-layout">
         <section className="feed-content">
-          <Link className="feed-back" to="/dates">← К плитке</Link>
           <p className="feed-designation">{date.designation}</p>
           <h1>МИНИМАЛЬНОЕ РАССТОЯНИЕ ДО ЗЕМЛИ</h1>
           {date.shortDescription && <details className="feed-description" key={date.id}><summary><span>{date.shortDescription}</span></summary></details>}

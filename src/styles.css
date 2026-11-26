@@ -59,7 +59,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 .app-request-error { position: absolute; z-index: 12; bottom: calc(var(--tab-height) + 8px); inset-inline: 14px; margin: 0; }
 .like-button { padding: 0; border: 0; background: transparent; }
 .like-button[aria-pressed="true"] > :first-child { color: #e54872; }
-.like-stack.like-button:focus-visible, .next-icon-button:focus-visible, .feed-back:focus-visible { outline-color: #fff; }
+.like-stack.like-button:focus-visible, .next-icon-button:focus-visible { outline-color: #fff; }
 .card-delete:disabled { opacity: .45; }
 .observer-name { margin-left: auto; font-size: 14px; }
 .create-draft-form .upload-box:focus-within { outline: 2px solid var(--ink); outline-offset: 3px; }
